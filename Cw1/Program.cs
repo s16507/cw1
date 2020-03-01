@@ -23,29 +23,34 @@ namespace Cw1
 
 
             //var  newPerson = new Person { FirstName = "Kamil" };
+            //tool -> nuget packagemanager -> package manager
 
-            var url = "https://www.pja.edu.pl";
+            var url = args.Length > 0 ? args[0] : "https://www.pja.edu.pl";
 
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            using (var httpClient = new HttpClient())
             {
-                var htmlContent = await response.Content.ReadAsStringAsync();
-                var regex = new Regex("[a-z]+[a-z0-9]*@[a-z0-9]+\\.[a-z]+", RegexOptions.IgnoreCase);
+                using (var response = await httpClient.GetAsync(url))
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var htmlContent = await response.Content.ReadAsStringAsync();
+                        var regex = new Regex("[a-z]+[a-z0-9]*@[a-z0-9]+\\.[a-z]+", RegexOptions.IgnoreCase);
 
-                var matches = regex.Matches(htmlContent);
+                        var matches = regex.Matches(htmlContent);
 
-                foreach (var match in matches)
-                {
-                    Console.WriteLine(match.ToString());
-                }
+                        foreach (var match in matches)
+                        {
+                            Console.WriteLine(match.ToString());
+                        }
+
+                    }
+                //git add .
+                //git commit -m
+                // git push
+                httpClient.Dispose();
             }
-
-            
-
-
 
         }
     }
 }
+    
+
